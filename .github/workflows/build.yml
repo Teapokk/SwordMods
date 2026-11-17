@@ -1,0 +1,60 @@
+name: Build SwordMods APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build & Package SwordMods APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Restore Deterministic Signing Keystore
+        run: |
+          # Restaura a chave fixa de debug.keystore.base64
+          # Isso garante que a assinatura do APK seja SEMPRE IGUAL
+          # e o usuário NUNCA precise desinstalar e reinstalar o app para atualizar!
+          if [ -f debug.keystore.base64 ]; then
+            base64 -d debug.keystore.base64 > debug.keystore
+          else
+            keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 -storepass android -keypass android -dname "CN=SwordMods,O=SwordMods,C=BR"
+          fi
+          echo "Keystore configurada com chave fixa e idêntica!"
+
+      - name: Grant execute permission for gradlew
+        run: |
+          if [ -f gradlew ]; then
+            chmod +x gradlew
+          fi
+
+      - name: Build Debug APK
+        run: |
+          if [ -f gradlew ]; then
+            ./gradlew assembleDebug --stacktrace
+          else
+            gradle assembleDebug --stacktrace
+          fi
+
+      - name: Upload SwordMods APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SwordMods-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          retention-days: 30

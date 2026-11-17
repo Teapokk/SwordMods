@@ -1,0 +1,8 @@
+{
+  "name": "SwordMods",
+  "description": "Launcher e gerenciador de mods SwordMods para Among Us com login oficial Innersloth de 24h, servidor dedicado e replays reais.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

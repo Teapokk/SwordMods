@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SwordMods</string>
+    <string name="game_title">Among Us</string>
+    <string name="game_package">com.innersloth.spacemafia</string>
+    <string name="btn_play">JOGAR COM SWORDMODS</string>
+    <string name="btn_create_shortcut">Criar Atalho na Tela Inicial</string>
+    <string name="btn_site_cricri">Site Oficial CriCri Mods</string>
+    <string name="status_detected">Among Us Instalado</string>
+    <string name="status_not_detected">Among Us Não Encontrado</string>
+</resources>
